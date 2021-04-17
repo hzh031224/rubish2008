@@ -5,8 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="/js/vue.js"></script>
+    <script src="/js/vue-router.js"></script>
+    <script src="/js/axios.min.js"></script>
 </head>
 <body>
-    <h1>黄真豪</h1>
+    <div id="app">
+        <h1>登录</h1>
+        用户名：<input type="text" v-model="user_name"><br>
+        密码：<input type="password" v-model="user_pass"><br>
+        <button @click="login">登录</button>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                user_name:"",
+                user_pass:""
+            },
+            methods:{
+                //点击登录触发效果
+                login(){
+                    const user_name = this.user_name
+                    const user_pass = this.user_pass
+                    console.log(user_name,user_pass)
+
+                    //发送post请求 将用户名和密码发送给后端登录接口
+                    axios.post("http://localhost:8080/user/login",{user_name:user_name,user_pass:user_pass}).then(function(res){
+                        console.log(res)
+                    })
+                }
+            }
+        })
+    </script>
 </body>
 </html>

@@ -26,9 +26,47 @@ app.all('*', (req, res, next) => {
 app.use(bodyParser.json())
 
 //用户列表
-app.get('/user',function(req,res){
-    //向客户端响应数据
-    res.send("欢迎访问用户接口")
+app.get('/user/list',(req,res)=>{
+    const sql = "select user_id,user_name,email,mobile from p_users order by user_id desc limit 5"
+    connection.query(sql,function(err,result){
+        res.send(result)
+    })
+})
+
+//获取用户信息
+app.get('/user/detail',(req,res)=>{
+    console.log(req.query)
+    let uid = req.query.uid
+    let sql = `select user_id,user_name,email,mobile from p_users where user_id=${uid}`
+
+    connection.query(sql,function(err,result){
+        res.send({
+            errno: 0,
+            msg: 'ok',
+            data:{
+                u:result[0]
+            }
+        })
+    })
+})
+
+//更新用户信息
+app.post('/user/update',(req,res)=>{
+
+
+    let user_id = req.body.user_id
+    let user_name = req.body.user_name
+    let email = req.body.email
+    let mobile = req.body.mobile
+
+    sql = `update p_users set user_name='${user_name}',email='${email}',mobile='${mobile}' where user_id=${user_id}`
+
+    connection.query(sql,function(err,result){
+        res.send({
+            errno: 0,
+            msg: 'ok'
+        })
+    })
 })
 
 //访问列表

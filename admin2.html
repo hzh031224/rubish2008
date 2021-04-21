@@ -166,7 +166,7 @@
             <td>{{item.mobile}}</td>
             <td>
               <a href="javascript:;" @click="goDetail(item.user_id)">详情</a> |
-              <a href="javascript:;">删除</a> |
+              <a href="javascript:;" @click="del(item.user_id)">删除</a> |
               <router-link :to="{path:'/edit/'+item.user_id}">编辑</router-link>
             </td>
           </tr>
@@ -191,6 +191,17 @@
             //切换路由
             this.$router.push("/userDetail/"+userid)
           },
+          //删除
+          del(uid){
+            console.log(uid);
+            //请求接口
+            let self = this
+            axios.get("http://api.2008.com/user/delete?uid="+uid).then(function(res){
+              console.log("删除用户")
+              console.log(res.data)
+              self.getUserList()    //调用父级用户列表接口
+            })
+          }
         }
       }
 

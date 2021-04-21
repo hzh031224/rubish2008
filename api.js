@@ -27,7 +27,7 @@ app.use(bodyParser.json())
 
 //用户列表
 app.get('/user/list',(req,res)=>{
-    const sql = "select user_id,user_name,email,mobile from p_users order by user_id desc limit 5"
+    const sql = "select user_id,user_name,email,mobile from p_users where is_delete=0 order by user_id desc limit 5"
     connection.query(sql,function(err,result){
         res.send(result)
     })
@@ -66,6 +66,27 @@ app.post('/user/update',(req,res)=>{
             errno: 0,
             msg: 'ok'
         })
+    })
+})
+
+//删除
+app.get('/user/delete',function(req,res){
+    let uid = req.query.uid   //接收参数uid
+    // let sql = "delete from p_users where user_id="+uid
+    let sql = "update p_users set is_delete=1 where user_id="+uid
+    connection.query(sql,function(err,result){
+        console.log(result)
+        if(result.affectedRows){
+            res.send({
+                error:0,
+                msg:"ok"
+            })
+        }else{
+            res.send({
+                error:50001,
+                msg:"no"
+            })
+        }
     })
 })
 
